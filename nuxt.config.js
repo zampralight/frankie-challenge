@@ -1,9 +1,7 @@
-const colors = require('vuetify/es5/util/colors').default
-
 module.exports = {
   mode: 'universal',
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    titleTemplate: '%s',
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
@@ -16,8 +14,18 @@ module.exports = {
   },
   loading: { color: '#fff' },
   css: [
+    '@/styles/index.scss'
   ],
+  build: {
+    extend (config, ctx) {
+      config.module.rules.push({
+        test: /\.pug$/,
+        loader: 'pug-plain-loader'
+      })
+    }
+  },
   plugins: [
+    '@/plugins/composition-api'
   ],
   buildModules: [
     '@nuxtjs/eslint-module',
@@ -26,15 +34,47 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/auth'
   ],
-  axios: {
-  },
   vuetify: {
     customVariables: ['~/assets/variables.scss']
   },
-  build: {
-    extend (config, ctx) {
+  axios: {
+    baseURL: 'https://reqres.in/api'
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/login',
+            method: 'post'
+          },
+          logout: false,
+          user: false
+        },
+        tokenRequired: true,
+        autoFetchUser: false
+      }
+    }
+  },
+  router: {
+    base: '/',
+    routeNameSplitter: '/',
+    extendRoutes (routes, resolve) {
+      routes.push({
+        path: '/admin',
+        beforeEnter: (to, from, next) => { next('/') }
+      })
+      routes.push({
+        path: '/notifications',
+        beforeEnter: (to, from, next) => { next('/') }
+      })
+      routes.push({
+        path: '*',
+        redirect: '/'
+      })
     }
   }
 }

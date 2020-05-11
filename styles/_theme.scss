@@ -1,0 +1,30 @@
+.tapable {
+  user-select: none;
+  cursor: pointer;
+}
+
+.v-input {
+  .v-messages {
+    min-height: 18px;
+  }
+}
+
+.v-input.error--text {
+  .v-messages {
+    &__wrapper {
+      &:before {
+        content: '\F0159';
+        display: inline-block;
+        font: normal normal normal 24px/1 "Material Design Icons";
+        font-size: inherit;
+        text-rendering: auto;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+        margin-right: 6px;
+      }
+    }
+    &__message {
+      display: inline;
+    }
+  }
+}
